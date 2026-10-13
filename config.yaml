@@ -1,0 +1,4 @@
+# All tunable values live here, not in code.
+# Values are placeholders; they get decided by experiments in M2.
+app:
+  log_level: INFO
