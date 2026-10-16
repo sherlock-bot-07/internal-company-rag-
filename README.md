@@ -32,3 +32,5 @@ ruff check . && ruff format --check .
 ## Deneme
 
 Bu bir test PR'ıdır - otomasyon denemesi.
+
+Küçük deneme notu: pipeline tetikleme testi.
