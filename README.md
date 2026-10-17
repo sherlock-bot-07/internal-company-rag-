@@ -29,3 +29,10 @@ ruff check . && ruff format --check .
 | `eval/` | Golden set and evaluation scripts |
 | `docs/` | Experiments log and ADRs |
 | `config.yaml` | All tunable settings |
+## Deneme
+
+Bu bir test PR'ıdır - otomasyon denemesi.
+
+Küçük deneme notu: pipeline tetikleme testi.
+
+selam ben sherlock
