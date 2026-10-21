@@ -119,6 +119,10 @@ class Bm25Retriever:
                 continue
             normalization = index.k1 * (1.0 - index.b + index.b * doc_len / index.avg_doc_len)
             score += (
-                _idf(df, total_docs) * term_tf * (index.k1 + 1.0) / (term_tf + normalization) * q_count
+                _idf(df, total_docs)
+                * term_tf
+                * (index.k1 + 1.0)
+                / (term_tf + normalization)
+                * q_count
             )
         return score

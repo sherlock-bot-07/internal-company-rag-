@@ -12,12 +12,20 @@ CFG_SECTION = {
 
 def make_doc(doc_id: str, access_label: str, text: str) -> Document:
     return Document(
-        doc_id=doc_id, title="Örnek Başlık", department="Test", access_label=access_label, text=text
+        doc_id=doc_id,
+        title="Örnek Başlık",
+        department="Test",
+        access_label=access_label,
+        text=text,
     )
 
 
 def simple_body() -> str:
-    return "# Örnek Başlık\n\n## 1. Amaç\n\nBu belge amaç içerir.\n\n## 2. Kapsam\n\nKapsam buradadır.\n"
+    return (
+        "# Örnek Başlık\n\n"
+        "## 1. Amaç\n\nBu belge amaç içerir.\n\n"
+        "## 2. Kapsam\n\nKapsam buradadır.\n"
+    )
 
 
 def test_each_section_becomes_chunk_with_title_prefix() -> None:
@@ -42,7 +50,8 @@ def test_chunks_inherit_access_label() -> None:
 
 
 def test_text_before_first_section_is_giris() -> None:
-    doc = make_doc("TST-003", "satis", "# Başlık\n\nBu giriş metnidir.\n\n## 1. Gövde\n\nİçerik.\n")
+    body = "# Başlık\n\nBu giriş metnidir.\n\n## 1. Gövde\n\nİçerik.\n"
+    doc = make_doc("TST-003", "satis", body)
     chunks = chunk_document(doc, CFG_SECTION)
     assert chunks[0].section == "Giriş"
     assert "Bu giriş metnidir." in chunks[0].text
@@ -52,7 +61,8 @@ def test_text_before_first_section_is_giris() -> None:
 def test_long_section_is_split_within_limit() -> None:
     long = ""
     for i in range(10):
-        long += f"Paragraf {i} " + "kelime " * 150 + "\n\n"
+        long += f"Paragraf {i} " + "kelime " * 150
+        long += "\n\n"
     body = f"# Başlık\n\n## 1. Long\n\n{long}"
     doc = make_doc("TST-004", "finans", body)
     cfg = {"chunking": {**CFG_SECTION["chunking"], "max_chars": 300}}
@@ -71,7 +81,9 @@ def test_long_section_is_split_within_limit() -> None:
 
 def test_fixed_window_with_overlap() -> None:
     doc = make_doc("TST-005", "destek", "abcdefghij")
-    cfg = {"chunking": {"strategy": "fixed", "fixed_size": 4, "fixed_overlap": 1, "max_chars": 1200}}
+    cfg = {
+        "chunking": {"strategy": "fixed", "fixed_size": 4, "fixed_overlap": 1, "max_chars": 1200}
+    }
     chunks = chunk_document(doc, cfg)
     texts = [chunk.text for chunk in chunks]
     assert texts == ["abcd", "defg", "ghij"]
@@ -80,7 +92,14 @@ def test_fixed_window_with_overlap() -> None:
 
 def test_fixed_overlap_larger_than_size_raises() -> None:
     doc = make_doc("TST-006", "destek", "metin")
-    cfg = {"chunking": {"strategy": "fixed", "fixed_size": 100, "fixed_overlap": 100, "max_chars": 1200}}
+    cfg = {
+        "chunking": {
+            "strategy": "fixed",
+            "fixed_size": 100,
+            "fixed_overlap": 100,
+            "max_chars": 1200,
+        }
+    }
     with pytest.raises(ValueError, match="fixed_overlap"):
         chunk_document(doc, cfg)
 

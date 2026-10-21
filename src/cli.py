@@ -55,7 +55,10 @@ def _run_ask(args: argparse.Namespace, cfg: dict) -> int:
         return 0
     for rank, (chunk, score) in enumerate(results, start=1):
         preview = " ".join(chunk.text.split())[:PREVIEW_CHARS]
-        print(f"{rank}. [{chunk.doc_id}] {chunk.section} | {chunk.access_label} | {score:.4f} | {preview}")
+        print(
+            f"{rank}. [{chunk.doc_id}] {chunk.section} | {chunk.access_label} | "
+            f"{score:.4f} | {preview}"
+        )
     return 0
 
 
