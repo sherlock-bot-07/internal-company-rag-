@@ -29,10 +29,35 @@ ruff check . && ruff format --check .
 | `eval/` | Golden set and evaluation scripts |
 | `docs/` | Experiments log and ADRs |
 | `config.yaml` | All tunable settings |
-## Deneme
+| `docs/adr/` | Architecture decision records |
+| `docs/experiments.md` | Experiment log |
 
-Bu bir test PR'ıdır - otomasyon denemesi.
+## Demo
 
-Küçük deneme notu: pipeline tetikleme testi.
+Same question, three roles — support can not see the legal compensation policy,
+legal can:
 
-selam ben sherlock
+```bash
+python -m src.cli ask --role destek "SLA ihlalinde tazminat oranı nasıl belirlenir?"
+python -m src.cli ask --role hukuk "SLA ihlalinde tazminat oranı nasıl belirlenir?"
+python -m src.cli ask --role yonetim "SLA ihlalinde tazminat oranı nasıl belirlenir?"
+python -m src.cli roles
+```
+
+Evaluation (role filter on for access checks; the quality section is a labeled
+CONTROL run with the filter disabled to isolate the retriever):
+
+```bash
+python -m eval.run_retrieval                      # baseline (section + BM25, stem 5)
+python -m eval.run_retrieval --set retrieval.bm25.stem_prefix=0   # E-002
+python -m eval.run_retrieval --set chunking.strategy=fixed        # E-005
+python -m eval.run_retrieval --out results.json
+```
+
+Optional dense retrieval (needs a model download on first run):
+
+```bash
+pip install -r requirements-dense.txt
+python -m eval.run_retrieval --set retrieval.type=dense
+```
+
